@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的积分</title>
+    <link rel="stylesheet" href="dist/css/zui.min.css">
+</head>
+
+<body>   
+            <div class="panel" style="width: 55%;margin: 20px auto;">
+                <div class="panel-heading" style="text-align: center; font-size: 18px;font-weight: bold;">
+                                                 我的积分
+                </div>
+                <div class="panel-body">
+                    <div class="col-xs-4">
+                        <div class="input-group with-padding" style="margin-bottom: 20px;">
+
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div id="sessionScore" style="width: 150px;margin: 0 auto;">          
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="input-group with-padding" style="margin-bottom: 20px;">
+
+                        </div>
+                    </div>
+                    <table class="table table-bordered" id="tableDataGridExample">
+                        <thead>
+                            <tr>
+                                <th>发生时间</th>
+                                <th>发生用户</th>
+                                <th>增加/扣除</th>
+                                <th>积分数</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userScoreBody">                 
+                        </tbody>
+                    </table>
+                    <div style="width: 200px; margin: 0 auto;">
+						<input onclick="pre()" type="button" value="上一页" class="btn">
+						<span id="page">0/0</span> <input onclick="next()" type="button"
+							value="下一页" class="btn">
+					</div>
+                </div>
+            </div>
+      <div style="width: 150px; margin: 0 auto 15px;">
+				<button class="btn btn-block" type="button"
+					onclick="javascript:history.go(-1)">返回</button>
+			</div>
+   
+</body>
+<script src="dist/lib/jquery/jquery.js"></script>
+<script src="dist/js/zui.min.js"></script>
+<script type="text/javascript">
+//定义分页变量
+var count=0;//一共多少条数据
+var limit=5;//每页显示多少条数据
+var start=0;//从哪开始
+var end=4;//到哪结束
+var allPage=1;//一共多少页
+var currPage=1;//当前在第几页
+//定义一个全局变量保存分页的用户信息
+var userScoreArr=null;
+
+function initPage(){//加载分页数据
+	 $.ajax({
+		   url:"userScore.act",
+		   type:"post",
+		   dataType:"JSON",
+		   data:{"start":start,"limit":limit},
+		   success:function(data){
+			   console.log(data.dataList);
+			   count=data.dataList.count;
+			   var arr=data.dataList.userScore;
+			   var str='';
+			   for(var i=0;i<arr.length;i++){
+				   str+='<tr>';
+				   str+='<td>'+arr[i].usCtime+'</td>';
+				   str+='<td>我</td>';
+				   str+='<td>'+(arr[i].scoreState==1?"增加":"减少")+'</td>';
+				   str+='<td>'+arr[i].score+'</td>';
+				   str+='</tr>';
+			   }
+			  $("#userScoreBody").html(str); 
+			  //分页数据展示
+			  allPage=count % limit ==0 ?(count/limit):(parseInt(count/limit+1));
+					  $("#page").html(currPage+"/"+allPage);
+		   },
+		   error:function(data){
+			   alert("请联系管理员!");
+		   }
+		 
+	 })
+}
+initPage();
+//上一页
+function pre() {
+		   if(currPage == 1){
+				alert('这已经是第一页了');
+			}else{
+				currPage--;
+				start -= limit;
+				end -= limit;
+				initPage();
+			}
+  }
+  
+//下一页
+function next() {
+	   if(currPage == allPage){
+			alert('这已经是最后一页了');
+		}else{
+			currPage++;
+			start += limit;
+			end += limit;
+			initPage();
+		}
+   }
+
+
+
+//从session中取出用户信息
+function userInfoSession(){
+	   $.ajax({
+		   url:"userSession.act",
+		   type:"post",
+		   dataType:"JSON",
+		   success:function(data){
+			   console.log(data);
+			   var arr=data.dataList.userInfo;
+			   var str='';
+			   str+='<span href="javascript:void(0);">当前积分: '+arr.userScore+'</span>';
+			   $('#sessionScore').html(str);
+		   },
+		   error:function(data){
+			   alert("请联系管理员！");
+		   }
+	   })
+}
+userInfoSession();
+</script>
+</html>

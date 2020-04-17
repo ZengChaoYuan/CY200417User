@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 约束，模糊匹配,补全标签 -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="mapper.UpFileMapper">
+  <!-- 上传文档  -->
+  <!-- 1.插入文档信息表  -->
+  <insert id="insertByFileInfo">
+  <selectKey order="BEFORE" keyProperty="fileInfo.fileId" resultType="long">
+   select seq_file_info.nextval from dual
+  </selectKey>
+  insert into file_info(file_id,file_name,up_ctime,file_state,type_id,user_id,admin_id,md5_code,file_size,save_path,file_score,file_intro) values
+                     (#{fileInfo.fileId},#{fileInfo.fileName},sysdate,0,#{fileInfo.typeId},#{fileInfo.userId},
+                     101,'system',8,#{fileInfo.savePath},#{fileInfo.fileScore},#{fileInfo.fileIntro})
+  </insert>
+  <!-- 2.插入文档审核表  -->
+  <insert id="insertByFileCheck">
+  insert into file_check_info(fc_id,file_id,check_state,check_ctime,admin_id) values
+                            (seq_file_check_info.nextval,#{fileCheck.fileId},0,sysdate,101)
+  </insert>
+  </mapper>

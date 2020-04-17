@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.FileSearchMapper">
+	<resultMap type="bean.FileSearch" id="FileSearchMap">
+		<id column="FC_ID" property="fcId" />
+		<result column="FILE_ID" property="fileId" />
+		<result column="CHECK_STATE" property="checkState" />
+		<result column="CHECK_CTIME" property="checkCtime" />
+		<result column="ADMIN_ID" property="adminId" />
+		<association property="fileInfo" javaType="bean.FileInfo">
+			<id column="FILE_ID" property="fileId" />
+			<result column="FILE_NAME" property="fileName" />
+			<result column="UP_CTIME" property="upCtime" />
+			<result column="FILE_STATE" property="fileState" />
+			<result column="TYPE_ID" property="typeId" />
+			<result column="USER_ID" property="userId" />
+			<result column="ADMIN_ID" property="adminId" />
+			<result column="MD5_CODE" property="md5Code" />
+			<result column="FILE_SIZE" property="fileSize" />
+			<result column="SAVE_PATH" property="savePath" />
+			<result column="FILE_SCORE" property="fileScore" />
+		</association>
+		<association property="fileType" javaType="bean.FileType">
+			<id column="FT_ID" property="ftId" />
+			<result column="TYPE_NAME" property="typeName" />
+			<result column="TAIL_NAME" property="tailName" />
+			<result column="TYPE_SCORE" property="typeScore" />
+			<result column="TYPE_CTIME" property="typeCtime" />
+		</association>
+		<association property="userInfo" javaType="bean.UserInfo">
+			<id column="USER_ID" property="userId" />
+			<result column="USER_NAME" property="userName" />
+			<result column="USER_NINAME" property="userNiName" />
+			<result column="USER_PWD" property="userPwd" />
+			<result column="USER_CTIME" property="userCtime" />
+			<result column="USER_STATE" property="userState" />
+			<result column="USER_SEX" property="userSex" />
+			<result column="USER_EDU" property="userEdu" />
+			<result column="USER_PRO" property="userPro" />
+			<result column="USER_EMAIL" property="userEmail" />
+			<result column="USER_TEL" property="userTel" />
+			<result column="USER_SCORE" property="userScore" />
+		</association>
+	</resultMap>
+
+	<select id="selectPage" resultMap="FileSearchMap">
+		select
+		b.file_id,b.file_name,b.up_ctime,b.file_score,d.user_name,c.type_name
+		from file_check_info a
+		left join file_info b on a.file_id=b.file_id
+		left join file_type c on c.ft_id=b.type_id
+		left join user_info d on
+		b.user_id=d.user_id
+		where a.check_state=1
+		<if test="fileName !=null">
+			and b.file_name like CONCAT('%',CONCAT(#{fileName},'%'))
+		</if>
+	</select>
+
+	<select id="countPage" resultType="long">
+		select count(0)
+		from file_check_info a
+		left join file_info b on
+		a.file_id=b.file_id
+		left join file_type c on c.ft_id=b.type_id
+		left join
+		user_info d on b.user_id=d.user_id
+		where a.check_state=1
+		<if test="fileName !=null">
+			and b.file_name like CONCAT('%',CONCAT(#{fileName},'%'))
+		</if>
+	</select>
+
+
+</mapper> 

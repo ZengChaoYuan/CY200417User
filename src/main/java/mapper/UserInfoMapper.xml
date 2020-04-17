@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 约束，模糊匹配,补全标签 -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="mapper.UserInfoMapper">
+<resultMap type="bean.UserInfo" id="UserInfoMap">
+  <id column="USER_ID" property="userId"/>
+  <result column="USER_NAME" property="userName"/>
+  <result column="USER_NINAME" property="userNiName"/>
+  <result column="USER_PWD" property="userPwd"/>
+  <result column="USER_CTIME" property="userCtime"/>
+  <result column="USER_STATE" property="userState"/>
+   <result column="USER_SEX" property="userSex"/>
+    <result column="USER_EDU" property="userEdu"/>
+    <result column="USER_PRO" property="userPro"/>
+     <result column="USER_EMAIL" property="userEmail"/>
+      <result column="USER_TEL" property="userTel"/>
+       <result column="USER_SCORE" property="userScore"/>
+</resultMap>
+  <!-- 通过用户ID找到用户个人信息   -->
+  <select id="selectUserInfoById" resultMap="UserInfoMap">
+   select * from user_info where user_id=#{userId}
+  </select>
+  
+</mapper>

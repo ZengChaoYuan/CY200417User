@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="mapper.FileTypeListMapper">
+  <resultMap type="bean.FileType" id="FileTypeMap">
+            <id column="FT_ID" property="ftId" />
+			<result column="TYPE_NAME" property="typeName" />
+			<result column="TAIL_NAME" property="tailName" />
+			<result column="TYPE_SCORE" property="typeScore" />
+			<result column="TYPE_CTIME" property="typeCtime" />
+  </resultMap>
+  
+  <select id="selectFileTypeList" resultMap="FileTypeMap">
+   select * from file_type
+  
+  </select>
+  </mapper>

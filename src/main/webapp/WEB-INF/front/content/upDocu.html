@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传文档</title>
+    <link rel="stylesheet" href="dist/css/zui.min.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="conter" style="flex-direction: column;">
+            <div class="panel" style="width: 40%;height: auto; margin: 20px auto;">
+                <div class="panel-heading" style="text-align: center; font-size: 18px;font-weight: bold;">
+                    上传文档
+                </div>
+                <div class="panel-body">
+                    <div class="col-xs-12">
+                        <div class="input-group with-padding">
+                            <span class="input-group-addon">文档标题</span>
+                            <input type="text" name="fileName" id="fileName" class="form-control" placeholder="请输入文档标题">
+                        </div>
+                    </div>
+                     <div class="col-xs-12">
+                        <div class="input-group with-padding">
+                            <span class="input-group-addon">文档类型</span>
+                            <select class="form-control" id="ftId">
+                              <!--   <option value="0">请选择文档类型</option>
+                                <option value="1">散文</option>
+                                <option value="2">小说</option>
+                                <option value="3">杂志</option>
+                                <option value="4">报刊</option> -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="input-group with-padding">
+                            <span class="input-group-addon">文档简介</span>
+                            <textarea name="fileIntro" id="fileIntro" cols="30" rows="10" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-xs-10">
+                        <div class="input-group with-padding">
+                            <span class="input-group-addon">请选择上传文档</span>
+                            <input type="text" name="savePath" id="savePath" class="form-control" placeholder="文档位置">
+                        </div>
+                    </div>
+                    <div class="col-xs-2">
+                        <div class="input-group with-padding">
+
+                            <button class="btn btn-block" type="button">浏览</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="input-group with-padding">
+                            <span class="input-group-addon">下载积分</span>
+                            <select class="form-control" name="fileScore" id="fileScore">
+                                <option value="0">请选择积分</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+
+                    </div>
+                    <div class="col-xs-5">
+                        <div class="with-padding">
+                            <button class="btn btn-block" onclick="upDocu()" type="button">上传</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-5">
+                        <div class="with-padding">
+                            <button class="btn btn-block" onclick="javascript:history.back(-1);" type="button">返回</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script src="dist/lib/jquery/jquery.js"></script>
+<script src="dist/js/zui.min.js"></script>
+<script type="text/javascript">
+function initFileTypeList() {//循环 出文件类型
+	$.ajax({
+		url : "fileType.act",
+		type : "post",
+		dataType : "JSON",
+		success : function(data) {
+			console.log(data);
+			var arr=data.dataList.fileType;
+			var str='';
+			str+=' <option value="0">请选择</option>';
+			for(var i=0;i<arr.length;i++){
+				 str+=' <option value="'+arr[i].ftId+'">'+arr[i].typeName+'</option>';
+			}
+			$("#ftId").html(str);
+		},
+		error : function(data) {
+			alert("请联系管理员！");
+		}
+	})
+}
+initFileTypeList();
+
+
+
+function upDocu(){
+	 var $fileName=$("#fileName");
+	 var $fileIntro=$("#fileIntro");
+	 var $ftId=$("#ftId");
+	 var $savePath=$("#savePath");
+	 var $fileScore=$("#fileScore");
+	 if($fileName.val()==""){
+		 alert("文件名不能为空!");
+	 }else if($ftId.val()==0){
+		 alert("请选择文档类型!");
+	 }else if($fileIntro.val()==""){
+		 alert("文件简介不能为空!");
+	 }else if($savePath.val()==""){
+		 alert("请选择保存路径!");
+	 }else if($fileScore.val()==0){
+		 alert("请选择下载积分!");
+	 }else{
+		 $.ajax({
+			   url:"upFile.act",
+			   type:"post",
+			   dataType:"JSON",
+			   data:{"fileName":$fileName.val(),"fileIntro":$fileIntro.val(),
+				   "ftId":$ftId.val(),"savePath":$savePath.val(),
+				   "fileScore":$fileScore.val()},
+			   success:function(data){
+				  if(data.id==1){
+					  window.alert(data.msg);
+                      //清空输入框
+                      $fileName.val("");
+                      $ftId.val(0);
+                      $fileIntro.val("");
+                      $savePath.val("");
+                      $fileScore.val(0);
+                      window.history.go(-1);
+				  }else if(data.id==2){
+					  window.alert(data.msg);
+				  }
+			   },
+			   error:function(data){
+				   alert("请联系管理员！");
+			   }
+		   })
+	 }
+}
+
+</script>
+</html>

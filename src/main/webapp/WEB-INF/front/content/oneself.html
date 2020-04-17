@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人信息</title>
+<link rel="stylesheet" href="dist/css/zui.min.css">
+</head>
+
+<body>
+	<div class="panel" style="width: 20%; height: auto; margin: 20px auto;">
+		<div class="panel-heading"
+			style="text-align: center; font-size: 18px; font-weight: bold;">
+			我的信息</div>
+		<div class="panel-body">
+			<div class="col-xs-12" id="userInfo">
+				
+			</div>
+		</div>
+	</div>
+</body>
+<script src="dist/lib/jquery/jquery.js"></script>
+<script src="dist/js/zui.min.js"></script>
+<script type="text/javascript">
+	function myInfo() {
+		$.ajax({
+					url : "userSession.act",
+					type : "post",
+					dataType : "JSON",
+					success : function(data) {
+						console.log(data);
+						var arr = data.dataList.userInfo;
+						var str = '';
+						str += '<div class="input-group with-padding">用户名：'
+								+ arr.userName + '</div>';
+						str += '<div class="input-group with-padding">性别：'
+								+ (arr.userSex == 1 ? "男" : "女") + '</div>';
+						str += '<div class="input-group with-padding">学历：'
+								+ arr.userEdu + '</div>';
+						str += '<div class="input-group with-padding">职业：'
+								+ arr.userPro + '</div>';
+						str += '<div class="input-group with-padding">手机号：'
+								+ arr.userTel + '</div>';
+						str += '<div class="input-group with-padding">Email：'
+								+ arr.userEmail + '</div>';
+						str += ' <div class="col-xs-12"><div class="with-padding"><button class="btn btn-block" onclick="javascript:history.back(-1);" type="button">返回</button></div></div>';
+						$('#userInfo').html(str);
+					},
+					error : function(data) {
+						alert("请联系管理员!");
+					}
+				});
+	}
+	myInfo();
+</script>
+
+</html>

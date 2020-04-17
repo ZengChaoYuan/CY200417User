@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
+        <property name="username" value="ZCY100"/>
+        <property name="password" value="ZCY100"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+   <!-- 查看个人信息  -->
+   <mapper resource="mapper/UserInfoMapper.xml"/>
+    <!-- 查看个人上传文档  -->
+    <mapper resource="mapper/MyFileInfoMapper.xml"/>
+    <!-- 上传文档  -->
+    <mapper resource="mapper/UpFileMapper.xml"/>
+     <!-- 循环出文件类型实现类  -->
+    <mapper resource="mapper/FileTypeListMapper.xml"/> 
+     <!-- 文件搜索实现类  -->
+    <mapper resource="mapper/FileSearchMapper.xml"/> 
+     <!-- 个人积分实现类  -->
+     <mapper resource="mapper/UserScoreMapper.xml"/> 
+  </mappers>
+</configuration>

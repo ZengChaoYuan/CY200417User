@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.UserScoreMapper">
+<resultMap type="bean.UserScore" id="UserScoreMapper">
+<id column="US_ID" property="usId" />
+		<result column="USER_ID" property="userId" />
+<result column="SCORE_STATE" property="scoreState" />
+<result column="SCORE" property="score" />
+<result column="US_CTIME" property="usCtime" />
+</resultMap>
+<select id="selectPage" resultMap="UserScoreMapper">
+select * from user_score_io where user_id=#{userId}
+</select>
+<select id="countPage" resultType="long">
+select count(0) from user_score_io where user_id=#{userId}
+</select>
+
+
+</mapper>
